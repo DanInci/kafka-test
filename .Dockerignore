@@ -1,0 +1,7 @@
+.idea
+target
+kafka-binaries
+docker-compose.yml
+Dockerfile
+run.sh
+stop.sh

@@ -1,0 +1,49 @@
+version: '3.4'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+    - zookeeper
+    links:
+    - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "streams-plaintext-input:1:1,streams-wordcount-output:1:1:compact"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
+#  stream-app-build:
+#    image: stream-app-build
+#    container_name: stream-app-build
+#    depends_on:
+#      - kafka-1
+#      - kafka-2
+#      - kafka-3
+#    build:
+#      context: .
+#      target: stream-app-build
+#
+#  stream-app:
+#    image: stream-app
+#    container_name: stream-app
+#    build:
+#      context: .
+#      target: stream-app
+#    networks:
+#      - kafka-cluster
+#    depends_on:
+#      - kafka-1
+#      - kafka-2
+#      - kafka-3
