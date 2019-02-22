@@ -1,49 +1,71 @@
 version: '3.4'
 
+networks:
+  kafka-network:
+
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: confluentinc/cp-zookeeper
+    hostname: zookeeper
     container_name: zookeeper
+    networks:
+      - kafka-network
     ports:
       - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
 
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
+  kafka-1:
+    image: confluentinc/cp-kafka
+    hostname: kafka-1
+    container_name: kafka-1
+    networks:
+      - kafka-network
+    depends_on:
+      - zookeeper
     ports:
       - "9092:9092"
-    depends_on:
-    - zookeeper
-    links:
-    - zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "streams-plaintext-input:1:1,streams-wordcount-output:1:1:compact"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:9092,PLAINTEXT://kafka-1:29092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
+  kafka-2:
+    image: confluentinc/cp-kafka
+    hostname: kafka-2
+    container_name: kafka-2
+    networks:
+      - kafka-network
+    depends_on:
+      - zookeeper
+    ports:
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:9093,PLAINTEXT://kafka-2:29093
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
-#  stream-app-build:
-#    image: stream-app-build
-#    container_name: stream-app-build
-#    depends_on:
-#      - kafka-1
-#      - kafka-2
-#      - kafka-3
-#    build:
-#      context: .
-#      target: stream-app-build
-#
-#  stream-app:
-#    image: stream-app
-#    container_name: stream-app
-#    build:
-#      context: .
-#      target: stream-app
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry
+#    hostname: schema-registry
+#    container_name: schema-registry
 #    networks:
-#      - kafka-cluster
+#      - kafka-network
 #    depends_on:
+#      - zookeeper
 #      - kafka-1
 #      - kafka-2
-#      - kafka-3
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'

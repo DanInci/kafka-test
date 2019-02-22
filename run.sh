@@ -21,7 +21,7 @@ trap clean exit
 
 "${RUN:-true}" || exit 0
 
-declare -a deps=(zookeeper kafka)
+declare -a deps=(zookeeper kafka-1 kafka-2)
 
 test ${#deps[@]} -eq 0 || docker-compose pull "${deps[@]}"
 docker-compose build --pull
