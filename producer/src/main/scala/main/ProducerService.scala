@@ -25,7 +25,7 @@ final class ProducerService[F[_]](
         record = new ProducerRecord[String, Json]("non-filtered-json", json)
         _ <- F.delay {
           producer.send(record)
-          println("sent message: " + record.value)
+          println(s"Producer sent: ${record.value}")
         }
         resp <- Ok()
       } yield resp

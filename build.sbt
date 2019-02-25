@@ -35,7 +35,8 @@ def streamSettings: Seq[Setting[_]] = Seq(
     `kafka-streams`,
     circeCore,
     circeGeneric,
-    circeGenericExtras
+    circeGenericExtras,
+    circeParser
   ),
   assemblyOutputPath in assembly := file("target/kafka-stream-app.jar"),
 )
@@ -49,7 +50,8 @@ def consumerSettings: Seq[Setting[_]] = Seq(
     `kafka-clients`,
     circeCore,
     circeGeneric,
-    circeGenericExtras
+    circeGenericExtras,
+    circeParser
   ),
   assemblyOutputPath in assembly := file("target/kafka-consumer-app.jar"),
 )
@@ -75,5 +77,5 @@ lazy val circeVersion: String = "0.9.3"
 
 lazy val circeCore: ModuleID = "io.circe" %% "circe-core" % circeVersion
 lazy val circeGeneric: ModuleID = "io.circe" %% "circe-generic" % circeVersion
-lazy val circeGenericExtras
-: ModuleID = "io.circe" %% "circe-generic-extras" % circeVersion
+lazy val circeParser: ModuleID = "io.circe" %% "circe-parser" % circeVersion
+lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % circeVersion

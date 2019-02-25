@@ -4,7 +4,8 @@ import java.time.Duration
 import java.util.Properties
 import java.util.Arrays
 
-import io.circe.Json
+import io.circe._
+import io.circe.generic.semiauto.deriveDecoder
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -15,6 +16,8 @@ import org.apache.kafka.common.serialization.StringDeserializer
   * @since 22/02/2019
   */
 object ConsumerApp extends App {
+
+  implicit val modelDecoder: Decoder[FilteredModel] = deriveDecoder[FilteredModel]
 
   val config = {
     val p = new Properties()
@@ -35,7 +38,10 @@ object ConsumerApp extends App {
     val records = consumer.poll(Duration.ofMillis(2000))
 
     records.forEach(record => {
-      println("received message: " + record.value)
+      record.value.as[FilteredModel] match {
+        case Left(e) => println(s"Failed to decode model $e")
+        case Right(m) => println(s"Consumer received: $m")
+      }
     })
 
     consumer.commitSync()

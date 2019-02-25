@@ -6,7 +6,6 @@ import org.apache.kafka.common.serialization.Serializer
 import io.circe._
 
 
-
 /**
   * @author Daniel Incicau, daniel.incicau@busymachines.com
   * @since 22/02/2019
