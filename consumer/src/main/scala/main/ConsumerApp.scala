@@ -28,10 +28,6 @@ object ConsumerApp extends App {
 
   val consumer = new KafkaConsumer[String, Json](config, new StringDeserializer(), new KafkaJsonDeserializer())
 
-  sys.ShutdownHookThread {
-    consumer.close(Duration.ZERO)
-  }
-
   consumer.subscribe(Arrays.asList("filtered-json"))
 
   while(true) {

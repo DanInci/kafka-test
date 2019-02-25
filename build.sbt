@@ -36,7 +36,7 @@ def streamSettings: Seq[Setting[_]] = Seq(
     circeCore,
     circeGeneric,
     circeGenericExtras,
-    circeParser
+    circeParser,
   ),
   assemblyOutputPath in assembly := file("target/kafka-stream-app.jar"),
 )
@@ -51,7 +51,7 @@ def consumerSettings: Seq[Setting[_]] = Seq(
     circeCore,
     circeGeneric,
     circeGenericExtras,
-    circeParser
+    circeParser,
   ),
   assemblyOutputPath in assembly := file("target/kafka-consumer-app.jar"),
 )
