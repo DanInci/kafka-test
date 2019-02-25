@@ -52,6 +52,7 @@ def consumerSettings: Seq[Setting[_]] = Seq(
     circeGeneric,
     circeGenericExtras,
     circeParser,
+    influxClient
   ),
   assemblyOutputPath in assembly := file("target/kafka-consumer-app.jar"),
 )
@@ -75,7 +76,10 @@ lazy val `kafka-clients`
 //https://circe.github.io/circe/
 lazy val circeVersion: String = "0.9.3"
 
-lazy val circeCore: ModuleID = "io.circe" %% "circe-core" % circeVersion
-lazy val circeGeneric: ModuleID = "io.circe" %% "circe-generic" % circeVersion
-lazy val circeParser: ModuleID = "io.circe" %% "circe-parser" % circeVersion
-lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % circeVersion
+lazy val circeCore: ModuleID = "io.circe" %% "circe-core" % circeVersion withSources()
+lazy val circeGeneric: ModuleID = "io.circe" %% "circe-generic" % circeVersion withSources()
+lazy val circeParser: ModuleID = "io.circe" %% "circe-parser" % circeVersion withSources()
+lazy val circeGenericExtras: ModuleID = "io.circe" %% "circe-generic-extras" % circeVersion withSources()
+
+//https://github.com/paulgoldbaum/scala-influxdb-client
+lazy val influxClient: ModuleID = "com.paulgoldbaum" %% "scala-influxdb-client" % "0.6.1" withSources()

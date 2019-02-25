@@ -54,18 +54,14 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
-#  schema-registry:
-#    image: confluentinc/cp-schema-registry
-#    hostname: schema-registry
-#    container_name: schema-registry
-#    networks:
-#      - kafka-network
-#    depends_on:
-#      - zookeeper
-#      - kafka-1
-#      - kafka-2
-#    ports:
-#      - "8081:8081"
-#    environment:
-#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+  influx:
+    image: influxdb
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      INFLUXDB_DB: 'filtered_models'
+      INFLUXDB_USER: 'influxuser'
+      INFLUXDB_USER_PASSWORD: 'qwerty'
+
