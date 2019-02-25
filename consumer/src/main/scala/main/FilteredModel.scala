@@ -7,5 +7,5 @@ package main
 case class FilteredModel(
     id: Int,
     name: String,
-    address: String
+    timestamp: String
 )

@@ -47,7 +47,7 @@ object SimulatorApp extends App with SprayJsonSupport with DefaultJsonProtocol {
                         id           = NOW.getSecondOfMinute.toString,
                         randomData   = NOW.dayOfMonth().get().toString,
                         name         = "lulu" + NOW.dayOfYear().get().toString,
-                        timestamp    = NOW,
+                        timestamp    = NOW.toString("YYYY-MM-dd HH:mm:ss"),
                         anotherRData = NOW.getMillisOfSecond
     )
     this.sendRequest(rawReading).flatMap(_ => Future.successful(rawReading))
@@ -59,7 +59,7 @@ object SimulatorApp extends App with SprayJsonSupport with DefaultJsonProtocol {
 
   def sendRequest(reading: UnfilteredModel) = Future {
     Marshal(reading).to[RequestEntity].flatMap { entity =>
-      val request = HttpRequest(method = HttpMethods.POST, uri = "http//:localhost:3000/kafka", entity = entity)
+      val request = HttpRequest(method = HttpMethods.POST, uri = "http://localhost:3000/kafka", entity = entity)
       http.singleRequest(request).map(e => e.entity.discardBytes())
     }
   }.recoverWith {
@@ -71,14 +71,13 @@ object SimulatorApp extends App with SprayJsonSupport with DefaultJsonProtocol {
   final case class UnfilteredModel(id           : String,
                                    randomData   : String,
                                    name         : String,
-                                   timestamp    : LocalDateTime,
+                                   timestamp    : String,
                                    anotherRData : Int
                                   )
   while(true) {
 
     generateData.flatMap(msg => Future.successful(println(s"Message sent to producer!")))
-
-    Thread.sleep(800)
+    Thread.sleep(1000)
 
   }
 

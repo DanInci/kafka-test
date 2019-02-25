@@ -59,7 +59,7 @@ object ConsumerApp extends App {
           val point = Point("consumer_data")
             .addField("id", m.id)
             .addField("name", m.name)
-            .addField("address", m.address)
+            .addField("timstamp", m.timestamp)
           db.write(point)
             .onComplete(result =>
               if (result.isFailure) {

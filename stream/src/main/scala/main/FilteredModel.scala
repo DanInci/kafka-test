@@ -9,5 +9,5 @@ import org.joda.time.LocalDateTime
 case class FilteredModel(
     id: Int,
     name: String,
-    timestamp: LocalDateTime
+    timestamp: String
 )
