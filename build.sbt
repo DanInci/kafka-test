@@ -9,6 +9,9 @@ lazy val stream = project
 lazy val consumer = project
   .settings(consumerSettings)
 
+lazy val simulator = project
+  .settings(simulatorSettings)
+
 def producerSettings: Seq[Setting[_]] = Seq(
   name := "Kafka Producer App",
   version := "0.1",
@@ -37,6 +40,7 @@ def streamSettings: Seq[Setting[_]] = Seq(
     circeGeneric,
     circeGenericExtras,
     circeParser,
+    joda
   ),
   assemblyOutputPath in assembly := file("target/kafka-stream-app.jar"),
 )
@@ -56,6 +60,29 @@ def consumerSettings: Seq[Setting[_]] = Seq(
   ),
   assemblyOutputPath in assembly := file("target/kafka-consumer-app.jar"),
 )
+
+def simulatorSettings: Seq[Setting[_]] = Seq(
+  name := "Simulator App",
+  version := "0.1",
+  scalaVersion := "2.12.8",
+  mainClass := Some("main.SimulatorApp"),
+  libraryDependencies ++= Seq(
+    akkaHttp,
+    akkaActor,
+    akkaJsonSupport,
+    akkaStream,
+    joda
+  ),
+  assemblyOutputPath in assembly := file("target/simulator-app.jar"),
+)
+
+
+
+lazy val akkaActor       = "com.typesafe.akka" %% "akka-actor" % "2.5.21"
+lazy val akkaHttp        = "com.typesafe.akka" %% "akka-http" % "10.1.7"
+lazy val akkaJsonSupport = "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.7"
+lazy val akkaStream      = "com.typesafe.akka" %% "akka-stream" % "2.5.21"
+lazy val joda            = "joda-time" % "joda-time" % "2.9.2"
 
 //https://github.com/http4s/http4s
 lazy val Http4sVersion = "0.18.12"

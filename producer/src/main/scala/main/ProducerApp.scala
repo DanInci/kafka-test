@@ -22,15 +22,16 @@ object ProducerApp extends StreamApp[IO] {
   implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   override def stream(
-      args: List[String],
-      requestShutdown: IO[Unit]): fs2.Stream[IO, StreamApp.ExitCode] =
+      args            : List[String],
+      requestShutdown : IO[Unit]
+  ): fs2.Stream[IO, StreamApp.ExitCode] =
     for {
-      producer <- setupKafkaProducer[IO]
+      producer        <- setupKafkaProducer[IO]
       producerService = new ProducerService[IO](
         producer = producer
       )
-      exitCode <- streamServer[IO](
-        service = producerService.service
+      exitCode        <- streamServer[IO](
+        service  = producerService.service
       )
     } yield exitCode
 

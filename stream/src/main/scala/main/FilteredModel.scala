@@ -1,5 +1,7 @@
 package main
 
+import org.joda.time.LocalDateTime
+
 /**
   * @author Daniel Incicau, daniel.incicau@busymachines.com
   * @since 25/02/2019
@@ -7,5 +9,5 @@ package main
 case class FilteredModel(
     id: Int,
     name: String,
-    address: String
+    timestamp: LocalDateTime
 )
